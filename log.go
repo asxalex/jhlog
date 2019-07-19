@@ -23,11 +23,19 @@ var logLevel logging.Level
 var format = logging.MustStringFormatter(
 	`%{color}%{time:2006-01-02 15:04:05.000} %{shortfunc} > %{level:.4s} %{color:reset} %{message}`,
 )
+
 var defaultLogPath = "."
+
+func SetDefaultLogPath(p string) {
+	defaultLogPath = p
+}
 
 func getFile(logname string) (*File, error) {
 	logpath := defaultLogPath
 	filename := strings.TrimRight(logpath, Separator) + Separator + logname
+	if _, err := os.Stat(logpath); os.IsNotExist(err) {
+		os.MkdirAll(logpath, 0755)
+	}
 	f, err := NewFile(filename, "2006-01-02")
 	if err != nil {
 		return nil, err
