@@ -14,11 +14,16 @@ import (
 var logger *log.Logger
 
 func init() {
-	log.SetDefaultLogPath("./logs")
-	logger = log.GetLog("global-log")
+	jhlog.SetDefaultLogPath("./logs")
+	jhlog.SetLogLevel(jhlog.INFO)
+	logger = jhlog.GetLog("global-log")
 }
 
 func main() {
 	logger.Debugf("hello world")
+	logger.Infof("hello world")
+	logger.Warningf("hello world")
+	logger.Errorf("hello world")
+	logger.Criticalf("hello world")
 }
 ```

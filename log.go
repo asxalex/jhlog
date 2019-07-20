@@ -1,4 +1,4 @@
-package log
+package jhlog
 
 import (
 	"log"
@@ -9,11 +9,16 @@ import (
 )
 
 const (
-	defaultLevel = logging.DEBUG
+	DEBUG    = logging.DEBUG
+	INFO     = logging.INFO
+	WARNING  = logging.WARNING
+	ERROR    = logging.ERROR
+	CRITICAL = logging.CRITICAL
 )
 
 var (
-	Separator = string(os.PathSeparator)
+	defaultLevel = logging.DEBUG
+	Separator    = string(os.PathSeparator)
 )
 
 type Logger struct {
@@ -48,6 +53,10 @@ func getFile(logname string) (*File, error) {
 	f.SetRotate(1)
 	f.SetAutoDelete(7)
 	return f, nil
+}
+
+func SetLogLevel(level logging.Level) {
+	defaultLevel = logging.Level(level)
 }
 
 // GetLog returns the logging.Logger through the name
