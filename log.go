@@ -16,9 +16,14 @@ var (
 	Separator = string(os.PathSeparator)
 )
 
+type Logger struct {
+	*logging.Logger
+	path string
+}
+
 // Files is a reference to the opened files
 
-var logMap = make(map[string]*logging.Logger)
+var logMap = make(map[string]*Logger)
 var logLevel logging.Level
 var format = logging.MustStringFormatter(
 	`%{color}%{time:2006-01-02 15:04:05.000} %{shortfunc} > %{level:.4s} %{color:reset} %{message}`,
@@ -47,7 +52,7 @@ func getFile(logname string) (*File, error) {
 
 // GetLog returns the logging.Logger through the name
 // if the name is the same, it will get the same logger
-func GetLog(logname string) *logging.Logger {
+func GetLog(logname string) *Logger {
 	if logger, ok := logMap[logname]; ok {
 		return logger
 	}
@@ -64,6 +69,7 @@ func GetLog(logname string) *logging.Logger {
 	leveledbackend := logging.AddModuleLevel(leveledbackendFormatted)
 	leveledbackend.SetLevel(loglevel, "")
 	logger.SetBackend(leveledbackend)
-	logMap[logname] = logger
-	return logger
+	var logg *Logger = &Logger{Logger: logger}
+	logMap[logname] = logg
+	return logg
 }
