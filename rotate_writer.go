@@ -45,6 +45,7 @@ func (f *File) close() error {
 	if f.file == nil {
 		return nil
 	}
+	f.file.Sync()
 	f.file.Close()
 	f.file = nil
 	return nil
